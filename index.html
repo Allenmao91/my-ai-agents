@@ -214,6 +214,7 @@
 
     /* === Engineering grid === */
     .eng-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .agent-grid { grid-template-columns: repeat(2, 1fr); }
     .eng-card {
       background: var(--bg2); border: 1px solid var(--rule); border-radius: 14px;
       padding: 1.35rem 1.4rem;
@@ -227,6 +228,14 @@
     .eng-card p code {
       font-size: 0.8rem; background: var(--accent-soft); color: var(--accent);
       border-radius: 5px; padding: 0.08em 0.4em;
+    }
+    .eng-card .mini-list { list-style: none; padding: 0; margin: 0.7rem 0 0; }
+    .eng-card .mini-list li {
+      font-size: 0.86rem; color: var(--muted); line-height: 1.7; padding-left: 1.1rem; position: relative;
+    }
+    .eng-card .mini-list li::before {
+      content: ''; position: absolute; left: 0; top: 0.7em; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--accent);
     }
 
     /* === Timeline === */
@@ -301,7 +310,7 @@
         <div class="hero-text">
           <span class="hero-badge">PERSONAL AGENT WORKBENCH</span>
           <h1>把重复的事情，<br>交给 <em>Agent</em></h1>
-          <p class="lead">三个自研的自动化 Agent：两条浏览器刷课流水线 + 一个桌面待办工具——<mark class="key">静音播放、自动答题、智能切换、桌面提醒</mark>，把重复的事情全部交给代码。</p>
+          <p class="lead">借助 <mark class="key">TRAE</mark> 与底层大模型，把重复的事情交给 Agent 执行：两条浏览器刷课流水线 + 一个桌面待办工具——静音播放、自动答题、智能切换、桌面提醒，全部自动化。</p>
           <a class="hero-cta" href="#agents">看看我的 Agent
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
           </a>
@@ -312,8 +321,8 @@
       </div>
 
       <div class="stats">
-        <div class="stat"><div class="num">3</div><div class="label">个自研 Agent</div></div>
-        <div class="stat"><div class="num">2</div><div class="label">个学习平台覆盖</div></div>
+        <div class="stat"><div class="num">2</div><div class="label">个 AI Agent</div></div>
+        <div class="stat"><div class="num">3</div><div class="label">个自动化任务落地</div></div>
         <div class="stat"><div class="num">5 <small>小节</small></div><div class="label">单次会话自动完成</div></div>
         <div class="stat"><div class="num">6</div><div class="label">项工程攻坚沉淀</div></div>
       </div>
@@ -323,8 +332,37 @@
   <article class="container">
     <section id="agents">
       <span class="kicker">01 · AGENTS</span>
-      <h2>我的 Agent 们</h2>
-      <p class="section-lead">从浏览器到桌面，每一个 Agent 都从真实痛点出发，在实战中反复打磨，沉淀为可复用的自动化能力。</p>
+      <h2>我的 AI Agent</h2>
+      <p class="section-lead">真正在背后驱动一切的是这两位：<b>TRAE</b> 是执行与工具调用的载体，<b>GLM-5.3-Flash</b> 是理解与决策的大脑。下方所有自动化任务，都由它们协作完成。</p>
+
+      <div class="eng-grid agent-grid">
+        <div class="eng-card">
+          <span class="tag">SOFTWARE · 载体</span>
+          <h3>TRAE</h3>
+          <p>AI 驱动的编程与自动化工作台。提供浏览器控制、Shell 执行、文件操作、记忆与技能调度等工具调用能力，是所有自动化任务的<b>执行载体</b>。</p>
+          <ul class="mini-list">
+            <li>浏览器自动化 · Shell · 文件系统</li>
+            <li>技能（Skill）调度与长时记忆</li>
+            <li>多 Agent 子任务编排</li>
+          </ul>
+        </div>
+        <div class="eng-card">
+          <span class="tag">MODEL · 大脑</span>
+          <h3>GLM-5.3-Flash</h3>
+          <p>底层大语言模型，负责语义理解、决策推理、代码生成与自然语言交互，是 TRAE 的<b>大脑</b>。所有任务的判断与生成能力都来自它。</p>
+          <ul class="mini-list">
+            <li>自然语言理解与多轮对话</li>
+            <li>代码生成与调试推理</li>
+            <li>任务规划与工具调用决策</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="tasks">
+      <span class="kicker">02 · TASKS</span>
+      <h2>用 Agent 完成的任务</h2>
+      <p class="section-lead">从浏览器到桌面，每一项任务都由 TRAE + GLM 协作完成：从真实痛点出发，在实战中反复打磨，沉淀为可复用的自动化能力。</p>
 
       <article class="agent-card">
         <div class="agent-head">
@@ -332,7 +370,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4M8 4h8"/><circle cx="9" cy="13" r="1.2" fill="#ffffff" stroke="none"/><circle cx="15" cy="13" r="1.2" fill="#ffffff" stroke="none"/></svg>
           </div>
           <div>
-            <h3>智慧树刷课 Agent</h3>
+            <h3>智慧树刷课</h3>
             <code class="agent-id">zhihuishu-course-video-autoplay</code>
           </div>
           <div class="badges">
@@ -370,7 +408,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 7V4M8 4h8"/><circle cx="9" cy="13" r="1.2" fill="#ffffff" stroke="none"/><circle cx="15" cy="13" r="1.2" fill="#ffffff" stroke="none"/></svg>
           </div>
           <div>
-            <h3>苏大刷课 Agent</h3>
+            <h3>苏大刷课</h3>
             <code class="agent-id">suda-course-video-autoplay</code>
           </div>
           <div class="badges">
@@ -407,7 +445,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 2.5h6v3H9z"/><path d="M8.5 13l2.2 2.2 4.8-5"/></svg>
           </div>
           <div>
-            <h3>桌面待办 Agent</h3>
+            <h3>桌面待办</h3>
             <code class="agent-id">desktop_todo.py</code>
           </div>
           <div class="badges">
@@ -441,19 +479,19 @@
     </section>
 
     <section id="results">
-      <span class="kicker">02 · RESULTS</span>
+      <span class="kicker">03 · RESULTS</span>
       <h2>阶段性成效</h2>
-      <p class="section-lead">以智慧树《古希腊文明》共享课为例，Agent 在单次会话中自动完成了 5 个小节的学习任务，剩余小节可随时一键续刷。</p>
+      <p class="section-lead">以智慧树《古希腊文明》共享课为例，由 TRAE + GLM 驱动的刷课任务在单次会话中自动完成了 5 个小节，剩余小节可随时一键续刷。</p>
 
       <figure class="chart-figure">
         <figcaption><span class="cap-tag">FIG.01</span>智慧树《古希腊文明》刷课进度（截至 2026-10-16）</figcaption>
-        <div class="chart-note">共 25 个小节 · 绿色进度由 Agent 全自动完成，已完成小节零重复播放</div>
+        <div class="chart-note">共 25 个小节 · 绿色进度由 Agent 任务全自动完成，已完成小节零重复播放</div>
         <div id="chart-progress" style="width:100%;min-height:240px"></div>
       </figure>
     </section>
 
     <section id="engineering">
-      <span class="kicker">03 · ENGINEERING</span>
+      <span class="kicker">04 · ENGINEERING</span>
       <h2>工程亮点</h2>
       <p class="section-lead">真实平台从不配合：静音会被取消、点击会跳首页、播放会被限速。这些坑，都被逐一逆向并解决，沉淀为工程经验。</p>
 
@@ -492,7 +530,7 @@
     </section>
 
     <section id="timeline">
-      <span class="kicker">04 · TIMELINE</span>
+      <span class="kicker">05 · TIMELINE</span>
       <h2>成长历程</h2>
       <p class="section-lead">从人肉挂机到桌面待办，这条自动化之路是这样走出来的。</p>
 
@@ -504,12 +542,12 @@
         </div>
         <div class="tl-item">
           <span class="step">STEP 02</span>
-          <h3>苏大 Agent 上线</h3>
-          <p>第一个刷课工作流跑通：自动登录、静音播放、播完自动跳转、问答题自动作答提交。</p>
+          <h3>苏大刷课上线</h3>
+          <p>第一个刷课任务跑通：自动登录、静音播放、播完自动跳转、问答题自动作答提交。</p>
         </div>
         <div class="tl-item">
           <span class="step">STEP 03</span>
-          <h3>智慧树 Agent 进阶</h3>
+          <h3>智慧树刷课进阶</h3>
           <p>机构登录、进度圆环判定、随堂练习弹窗处理——应对更复杂的平台机制，能力全面升级。</p>
         </div>
         <div class="tl-item">
@@ -525,7 +563,7 @@
         <div class="tl-item">
           <span class="step">STEP 06</span>
           <h3>拓展 · 从浏览器到桌面</h3>
-          <p>Agent 能力出圈：Python GUI 桌面待办工具上线——置顶悬浮、智能提醒、数据持久化，自动化从刷课走进日常。</p>
+          <p>自动化能力出圈：Python GUI 桌面待办工具上线——置顶悬浮、智能提醒、数据持久化，从刷课走进日常。</p>
         </div>
       </div>
     </section>
@@ -542,3 +580,4 @@
   <script src="assets/charts.js"></script>
 </body>
 </html>
+
