@@ -67,7 +67,60 @@
 
   footer{border-top:1px solid var(--rule);padding:1.4rem 0;color:var(--muted);font-size:.82rem;text-align:center}
 
-  @media(max-width:880px){.lab{grid-template-columns:1fr}}
+  /* === 说明文档区块 === */
+  .doc-nav{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.1rem}
+  .doc-nav a{font-size:.82rem;font-weight:600;color:var(--muted);background:var(--bg2);border:1px solid var(--rule);border-radius:999px;padding:.32rem .85rem}
+  .doc-nav a:hover{color:var(--accent2);border-color:var(--accent2);text-decoration:none}
+  .doc{padding:2.8rem 0 0.4rem;scroll-margin-top:76px}
+  .doc h2{font-size:1.4rem;margin:.2rem 0 .5rem}
+  .doc .doc-lead{color:var(--muted);font-size:.92rem;max-width:56em;margin-bottom:1.3rem}
+  .doc-card{background:var(--bg2);border:1px solid var(--rule);border-radius:14px;padding:1.4rem 1.5rem}
+
+  .doc-table{width:100%;border-collapse:collapse;font-size:.86rem}
+  .doc-table th,.doc-table td{border-bottom:1px solid var(--rule);padding:.55rem .7rem;text-align:left;vertical-align:top}
+  .doc-table tr:last-child td{border-bottom:none}
+  .doc-table th{color:var(--accent2);font-family:var(--font-mono,monospace);font-size:.72rem;letter-spacing:.05em;font-weight:700}
+  .doc-table td{color:var(--muted)}
+  .doc-table td:first-child{color:var(--fg);white-space:nowrap;font-weight:600}
+  .doc-table code{font-size:.8rem;background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:.05em .35em}
+  .doc-table .sym{font-family:var(--font-mono,monospace);color:var(--accent2);white-space:nowrap}
+
+  .steps{list-style:none;counter-reset:step}
+  .steps li{position:relative;padding-left:2.3rem;margin-bottom:.95rem;font-size:.92rem;color:var(--muted)}
+  .steps li:last-child{margin-bottom:0}
+  .steps li::before{
+    counter-increment:step;content:counter(step);
+    position:absolute;left:0;top:.12rem;width:1.55rem;height:1.55rem;border-radius:50%;
+    background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent);
+    font-family:var(--font-mono,monospace);font-size:.78rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps li b{color:var(--fg)}
+  .steps li code{font-size:.8rem;background:var(--bg3);border:1px solid var(--rule);border-radius:5px;padding:.05em .35em;color:var(--accent2)}
+
+  .demo-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:1rem}
+  .demo-table th,.demo-table td{border:1px solid var(--rule);padding:.45rem .6rem;text-align:center}
+  .demo-table th{background:var(--bg3);color:var(--accent2);font-family:var(--font-mono,monospace);font-size:.72rem;font-weight:700}
+  .demo-table td{color:var(--muted)}
+  .demo-table td.hl{color:var(--fg);font-family:var(--font-mono,monospace)}
+
+  .calc{background:var(--bg3);border:1px solid var(--rule);border-radius:10px;padding:.9rem 1.1rem;font-family:var(--font-mono,monospace);font-size:.8rem;line-height:2;overflow-x:auto;color:#a9b3cf;margin-bottom:.9rem}
+  .calc .lbl{color:var(--accent2);font-weight:700}
+  .calc b{color:#fff}
+  .calc .cmt{color:#5c6785}
+  .calc .divider{border-top:1px dashed var(--rule);margin:.5rem 0;height:0}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+  .limit-box{background:var(--bg2);border:1px solid var(--rule);border-radius:14px;padding:1.3rem 1.4rem}
+  .limit-box h3{font-size:.98rem;margin-bottom:.7rem;display:flex;align-items:center;gap:.45rem}
+  .limit-box h3 .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  .limit-box ul{list-style:none}
+  .limit-box li{font-size:.87rem;color:var(--muted);padding:.33rem 0 .33rem 1rem;position:relative}
+  .limit-box li::before{content:'';position:absolute;left:0;top:.85em;width:5px;height:5px;border-radius:50%;background:var(--rule)}
+  .limit-box li b{color:var(--fg)}
+  .note{font-size:.82rem;color:#7c86a3;background:var(--bg3);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;padding:.6rem .85rem;margin-top:1rem}
+
+  @media(max-width:880px){.lab{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -85,6 +138,12 @@
     <span class="kicker">AI 概论作业 · MLP 学习参数可视化</span>
     <h1>看着 MLP <em>学会</em>「去不去健身房」</h1>
     <p class="lead">场景：根据<b>心情</b>（X 轴）和<b>天气</b>（Y 轴）决定今天去不去健身房。左图是决策边界——训练前一片混乱，训练后逐渐分出清晰的"去/不去"区域；右图是 W₁ b₁ W₂ b₂ 四个参数矩阵的热力图，实时展示权重如何被更新。所有代码纯 JavaScript 手写，未使用任何 ML 框架。</p>
+    <div class="doc-nav">
+      <a href="#mapping">元素对照</a>
+      <a href="#howto">如何训练</a>
+      <a href="#walkthrough">一次演练</a>
+      <a href="#limits">局限与数据</a>
+    </div>
   </section>
 
   <section class="lab">
@@ -142,6 +201,172 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ 元素对照 ============ -->
+  <section class="doc" id="mapping">
+    <span class="kicker">01 · 对照</span>
+    <h2>页面上每个元素，对应 MLP 里的什么</h2>
+    <p class="doc-lead">看热力图之前先建立这份映射：画面上的每一块颜色、每一个数字，都能在 MLP 的抽象框架里找到唯一对应物。</p>
+    <div class="doc-card">
+      <table class="doc-table">
+        <thead>
+          <tr><th>页面元素</th><th>MLP 中的对应</th><th>符号</th><th>含义</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>左侧每个散点</td><td>一个训练样本</td><td class="sym">x</td><td>一条「心情 + 天气 → 去/不去」的记录</td></tr>
+          <tr><td>散点横坐标</td><td>第 1 个输入特征</td><td class="sym">x₁</td><td>心情，-1（差）~ 1（好）</td></tr>
+          <tr><td>散点纵坐标</td><td>第 2 个输入特征</td><td class="sym">x₂</td><td>天气，-1（差）~ 1（好）</td></tr>
+          <tr><td>散点颜色</td><td>真实标签</td><td class="sym">y</td><td>紫 = 不去（0），青 = 去（1）</td></tr>
+          <tr><td>左侧背景颜色</td><td>模型预测</td><td class="sym">ŷ</td><td>越青表示预测「去」的概率越高</td></tr>
+          <tr><td>W₁ 热力图</td><td>输入层 → 隐藏层的权重</td><td class="sym">W₁ (2×H)</td><td>每个输入特征对每个隐藏神经元的贡献</td></tr>
+          <tr><td>b₁ 热力图</td><td>隐藏层偏置</td><td class="sym">b₁ (H)</td><td>隐藏神经元的激活门槛</td></tr>
+          <tr><td>W₂ 热力图</td><td>隐藏层 → 输出层的权重</td><td class="sym">W₂ (H×1)</td><td>每个隐藏特征对最终决策的贡献</td></tr>
+          <tr><td>b₂ 热力图</td><td>输出层偏置</td><td class="sym">b₂ (1)</td><td>整体「想去」的基础倾向</td></tr>
+          <tr><td>热力图颜色</td><td>权重数值</td><td class="sym">w</td><td>紫 = 负值（抑制），青 = 正值（促进），越亮绝对值越大</td></tr>
+          <tr><td>迭代次数</td><td>已完成训练轮数</td><td class="sym">epoch</td><td>每一轮 = 一次前向 + 一次反向 + 一次参数更新</td></tr>
+          <tr><td>损失</td><td>二元交叉熵</td><td class="sym">L</td><td>越小越好，0.693 相当于完全瞎猜</td></tr>
+          <tr><td>准确率</td><td>训练集分类正确率</td><td class="sym">acc</td><td>预测概率 &gt; 0.5 判为「去」，再与真实标签比对</td></tr>
+        </tbody>
+      </table>
+      <p class="note">隐藏神经元数 H 可在右侧滑条调整；W₁ 的列数与 W₂ 的行数始终等于 H，热力图的行列会随之变化。</p>
+    </div>
+  </section>
+
+  <!-- ============ 如何训练 ============ -->
+  <section class="doc" id="howto">
+    <span class="kicker">02 · 操作</span>
+    <h2>如何训练这个网络</h2>
+    <p class="doc-lead">页面加载时参数是随机初始化的，所以一开始决策边界几乎是一团乱色。按下面的顺序操作，你能亲眼看到它从「瞎猜」变成「会判断」。</p>
+    <div class="doc-card">
+      <ol class="steps">
+        <li><b>先看初始状态。</b>左侧背景几乎均匀、散点分布与颜色对不上，说明随机权重还没有学到任何规律；右侧四个热力图颜色杂乱无章。</li>
+        <li><b>点一次「单步迭代」。</b>这一次完成了完整的一轮：前向传播算预测 → 二元交叉熵算损失 → 反向传播算梯度 → 梯度下降更新参数。观察迭代次数变 1、损失出现在 0.69 附近、热力图颜色略微变化。</li>
+        <li><b>点「开始训练」连续跑。</b>默认每帧 50 步，损失会快速下降后逐渐趋缓；左侧背景开始分成清晰的青色与紫色区域，右侧热力图形成稳定的明暗格局。再点一次可暂停。</li>
+        <li><b>判断收敛。</b>当损失长时间不再明显下降、准确率稳定，就说明训练接近收敛。此时决策边界基本把「去」和「不去」分开了。</li>
+        <li><b>做对比实验。</b>重置后用不同超参数各训练一次：隐藏神经元 <code>2</code> 时边界过于简单（欠拟合）；<code>8~12</code> 时边界更弯曲，甚至开始贴合噪声；学习率 <code>0.01</code> 收敛很慢，<code>0.5</code> 以上容易震荡；激活函数选 ReLU 会得到折线状边界，tanh 更平滑。</li>
+        <li><b>重复训练。</b>点「重置参数」会重新随机初始化权重。同一组超参数多跑几次，最终边界不会完全相同——这是随机初始化带来的正常差异。</li>
+      </ol>
+      <p class="note">提示：单步迭代适合观察「一次参数更新到底改了什么」；连续训练适合观察「决策边界如何成形」。两者配合使用效果最好。</p>
+    </div>
+  </section>
+
+  <!-- ============ 一次完整演练 ============ -->
+  <section class="doc" id="walkthrough">
+    <span class="kicker">03 · 演练</span>
+    <h2>用两条演示数据走一遍训练</h2>
+    <p class="doc-lead">下面用一组手工设定的初始参数和 2 条样本，完整演算一次迭代。页面实际使用随机初始化和 160 条样本，数值不会相同，但计算流程完全一致。</p>
+
+    <div class="doc-card">
+      <h3 style="font-size:.95rem;margin-bottom:.8rem">演示数据（2 条样本）</h3>
+      <table class="demo-table">
+        <thead>
+          <tr><th>样本</th><th>心情 x₁</th><th>天气 x₂</th><th>真实标签 y</th><th>现实含义</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>①</td><td class="hl">0.8</td><td class="hl">0.9</td><td class="hl">1</td><td>心情好、天气好 → 去</td></tr>
+          <tr><td>②</td><td class="hl">-0.6</td><td class="hl">-0.5</td><td class="hl">0</td><td>心情差、天气差 → 不去</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:.8rem">网络结构：2 输入 → <b style="color:var(--fg)">2 个隐藏神经元（tanh）</b> → 1 输出（sigmoid），学习率 η = 0.1。初始参数手工设定为：</p>
+      <div class="calc">
+        <span class="lbl">W₁</span> = [[0.5, -0.3], [0.2, 0.4]]　　<span class="lbl">b₁</span> = [0.1, -0.1]<br>
+        <span class="lbl">W₂</span> = [0.6, -0.5]ᵀ　　<span class="lbl">b₂</span> = 0.05
+      </div>
+
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 1 步 · 前向传播（算预测）</h3>
+      <div class="calc">
+        <span class="cmt">// 样本 ① 心情 0.8，天气 0.9</span><br>
+        <span class="lbl">z₁⁽¹⁾</span> = 0.5×0.8 + 0.2×0.9 + 0.1 = <b>0.680</b><br>
+        <span class="lbl">z₁⁽²⁾</span> = -0.3×0.8 + 0.4×0.9 − 0.1 = <b>0.020</b><br>
+        <span class="lbl">a₁</span> = tanh(0.680), tanh(0.020) = <b>0.592, 0.020</b><br>
+        <span class="lbl">z₂</span> = 0.6×0.592 + (−0.5)×0.020 + 0.05 = <b>0.395</b><br>
+        <span class="lbl">ŷ</span> = sigmoid(0.395) = <b>0.598</b>　<span class="cmt">→ 预测 59.8% 会去，真实是「去」</span>
+        <div class="divider"></div>
+        <span class="cmt">// 样本 ② 心情 -0.6，天气 -0.5</span><br>
+        <span class="lbl">z₁</span> = <b>-0.300, -0.120</b>　→　<span class="lbl">a₁</span> = <b>-0.291, -0.119</b><br>
+        <span class="lbl">z₂</span> = 0.6×(−0.291) + (−0.5)×(−0.119) + 0.05 = <b>-0.065</b><br>
+        <span class="lbl">ŷ</span> = sigmoid(−0.065) = <b>0.484</b>　<span class="cmt">→ 预测 48.4% 会去，真实是「不去」</span>
+      </div>
+
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 2 步 · 计算损失</h3>
+      <div class="calc">
+        <span class="lbl">L₁</span> = −ln(0.598) = <b>0.515</b>　　<span class="lbl">L₂</span> = −ln(1 − 0.484) = <b>0.661</b><br>
+        <span class="lbl">L</span> = (0.515 + 0.661) / 2 = <b>0.588</b>　<span class="cmt">（两条样本的平均交叉熵）</span>
+      </div>
+
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 3 步 · 反向传播（算梯度）</h3>
+      <div class="calc">
+        <span class="cmt">// 输出层误差，N = 2</span><br>
+        <span class="lbl">δ₂</span> = (ŷ − y)/N　→　样本① <b>-0.201</b>，样本② <b>+0.242</b><br>
+        <div class="divider"></div>
+        <span class="cmt">// 输出层权重梯度 = 隐藏层输出 × 输出层误差</span><br>
+        <span class="lbl">∂L/∂W₂¹</span> = 0.592×(−0.201) + (−0.291)×0.242 = <b>-0.190</b><br>
+        <span class="lbl">∂L/∂W₂²</span> = 0.020×(−0.201) + (−0.119)×0.242 = <b>-0.033</b><br>
+        <span class="lbl">∂L/∂b₂</span> = (−0.201) + 0.242 = <b>+0.041</b><br>
+        <div class="divider"></div>
+        <span class="cmt">// 隐藏层误差 = 输出层误差回传 × tanh 导数 (1 − a₁²)</span><br>
+        <span class="lbl">δ₁</span> 样本① ≈ <b>-0.078, +0.100</b>　样本② ≈ <b>+0.133, -0.119</b><br>
+        <span class="lbl">∂L/∂W₁</span> = 输入 × δ₁ 累加 → <b>-0.142, -0.137, +0.151, +0.150</b><br>
+        <span class="lbl">∂L/∂b₁</span> = <b>+0.055, -0.019</b>
+      </div>
+
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 4 步 · 梯度下降（更新参数）</h3>
+      <div class="calc">
+        <span class="cmt">// 规则：新值 = 旧值 − 学习率 × 梯度</span><br>
+        <span class="lbl">W₂</span> = 0.6 − 0.1×(−0.190) = <b>0.619</b>　　−0.5 − 0.1×(−0.033) = <b>-0.497</b><br>
+        <span class="lbl">b₂</span> = 0.05 − 0.1×0.041 = <b>0.046</b><br>
+        <span class="lbl">W₁</span> = <b>0.514, 0.214, -0.315, 0.385</b><br>
+        <span class="lbl">b₁</span> = <b>0.095, -0.098</b>
+      </div>
+
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 5 步 · 一轮之后的效果</h3>
+      <div class="calc">
+        样本① ŷ：0.598 → <b>0.604</b>　（更接近 1，方向对了）<br>
+        样本② ŷ：0.484 → <b>0.476</b>　（更接近 0，方向对了）<br>
+        平均损失：0.588 → <b>0.575</b>　<span class="cmt">↓ 0.013</span>
+      </div>
+      <p class="note">一次更新只让损失下降约 0.013，参数几乎没变。这正是页面上需要成百上千次迭代的原因：学习是「一小步一小步挪」出来的，不是一步到位。</p>
+    </div>
+  </section>
+
+  <!-- ============ 局限与数据特殊性 ============ -->
+  <section class="doc" id="limits">
+    <span class="kicker">04 · 边界</span>
+    <h2>这个模型的局限与数据的特殊性</h2>
+    <p class="doc-lead">热力图很好看，但要清楚它证明了什么、没证明什么。下面两点决定了你应该如何解读页面上出现的数字。</p>
+
+    <div class="two-col">
+      <div class="limit-box">
+        <h3><span class="dot" style="background:var(--warn,#f59e0b)"></span>模型本身的局限</h3>
+        <ul>
+          <li><b>容量有限：</b>只有 1 个隐藏层、最多 12 个神经元，能画出弯曲边界，但应付不了螺旋这类高度复杂的分布。</li>
+          <li><b>对初始化敏感：</b>权重随机初始化，同样超参数两次训练得到的结果不完全一致。</li>
+          <li><b>对学习率敏感：</b>太大震荡甚至发散，太小则收敛极慢。</li>
+          <li><b>全批量梯度下降：</b>每一步都用全部 160 条样本，数据量大时非常慢；实际训练通常用 mini-batch。</li>
+          <li><b>没有正则化：</b>隐藏神经元过多时，模型会把噪声也记住，出现<b>过拟合</b>。</li>
+          <li><b>只支持二分类：</b>输出层是 sigmoid；多分类需要改成 softmax + 多输出。</li>
+          <li><b>准确率只是训练集准确率：</b>页面没有划分验证集/测试集，不能据此判断泛化能力。</li>
+          <li><b>输入已归一化：</b>心情与天气都被压到 [-1, 1]；真实数据需要先做标准化，否则训练会很不稳定。</li>
+        </ul>
+      </div>
+
+      <div class="limit-box">
+        <h3><span class="dot" style="background:var(--accent2)"></span>演示数据的特殊性</h3>
+        <ul>
+          <li><b>人工规则生成，不是真实采集：</b>心情与天气同号时结果确定（都好 → 去，都差 → 不去）；异号时由天气主导——天气好则 70% 去，天气差则 70% 不去。核心是一个接近 XOR 的非线性问题。</li>
+          <li><b>规模很小：</b>2 个特征、160 条样本，均匀分布在 [-1, 1]² 内，纯粹为了能画成二维图。</li>
+          <li><b>标签含 30% 随机翻转：</b>两个「一好一差」的象限里，有 30% 的标签是随机反的。这部分噪声无法被任何模型学会。</li>
+          <li><b>准确率上限约 85%：</b>两个确定象限（各 25%）全对，两个不确定象限（各 25%）只能对 70%，即 0.25 + 0.25 + 0.175 + 0.175 = 0.85。若准确率明显超过 85%，说明模型在「背」噪声，是过拟合的信号。</li>
+          <li><b>无缺失、无异常值、类别大致均衡：</b>省去了真实数据清洗的麻烦，也因此不能代表真实场景的难度。</li>
+          <li><b>不能外推到真实行为：</b>现实中「去不去健身房」还受时间、同伴、身体状况等影响，这套二维规则只是教学简化。</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="note">正确的解读方式：页面上决策边界的成形，证明的是「前向传播 + 反向传播 + 梯度下降」这套机制能让参数朝着正确的方向移动；它不证明模型适用于真实决策，也不代表 85% 以上的准确率是「更好」。</p>
+  </section>
+
 </main>
 
 <footer>纯 JavaScript 从零实现 MLP（前向传播 + 反向传播 + 梯度下降）· 健身房决策场景</footer>
