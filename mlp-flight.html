@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLP 飞行可视化 · agent.workbench</title>
+<style>
+  :root{
+    --bg:#0b0f1a;--bg2:#111827;--bg3:#1a2236;
+    --fg:#e8eaf2;--muted:#8892b0;--rule:#1e293b;
+    --accent:#7c5cff;--accent2:#22d3ee;--accent-soft:rgba(124,92,255,.15);
+    --good:#10b981;--warn:#f59e0b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--fg);font-family:"Outfit",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;overflow:hidden}
+  a{color:var(--accent2);text-decoration:none}
+
+  /* 顶栏 */
+  .site-header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:.7rem 1.2rem;border-bottom:1px solid var(--rule);
+    background:rgba(11,15,26,.92);backdrop-filter:blur(10px);
+    position:relative;z-index:10;
+  }
+  .site-header .brand{font-weight:700;font-size:1rem}
+  .site-header .brand em{color:var(--accent);font-style:normal}
+  .site-header a.back{color:var(--muted);font-size:.88rem}
+  .site-header a.back:hover{color:var(--accent2)}
+
+  /* 主体：左画布 + 右面板 */
+  .workspace{display:flex;height:calc(100vh - 52px)}
+  .stage{flex:1;position:relative;background:#0a0e18}
+  .stage canvas{display:block;width:100%;height:100%}
+  .stage .hint{
+    position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);
+    background:rgba(17,24,39,.85);border:1px solid var(--rule);
+    padding:.4rem .9rem;border-radius:999px;font-size:.82rem;color:var(--muted);
+  }
+
+  /* 右侧面板 */
+  .panel{
+    width:340px;flex-shrink:0;border-left:1px solid var(--rule);
+    background:var(--bg2);display:flex;flex-direction:column;
+  }
+  .panel-section{padding:1rem 1.1rem;border-bottom:1px solid var(--rule)}
+  .panel-section h3{
+    font-size:.8rem;color:var(--accent2);letter-spacing:.06em;
+    font-family:"JetBrains Mono",ui-monospace,monospace;margin-bottom:.6rem;
+  }
+  .panel-section .content{font-size:.9rem;color:var(--muted);min-height:40px}
+  .panel-section .placeholder{
+    border:1px dashed var(--rule);border-radius:10px;padding:1rem;
+    text-align:center;color:#4b5570;font-size:.82rem;
+  }
+
+  /* 底部控制条 */
+  .controls{
+    padding:.9rem 1.1rem;border-top:1px solid var(--rule);
+    background:var(--bg2);display:flex;flex-wrap:wrap;gap:.5rem;
+  }
+  .btn{
+    background:var(--accent);color:#fff;border:none;border-radius:9px;
+    padding:.5rem .9rem;font-family:inherit;font-weight:600;cursor:pointer;
+    font-size:.84rem;
+  }
+  .btn.ghost{background:transparent;border:1px solid var(--rule);color:var(--fg)}
+  .btn:hover{opacity:.88}
+
+  @media(max-width:760px){
+    .workspace{flex-direction:column}
+    .panel{width:100%;height:45vh;border-left:none;border-top:1px solid var(--rule)}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="brand">agent<em>.workbench</em> / MLP 飞行可视化</span>
+  <a class="back" href="index.html">← 返回主页</a>
+</header>
+
+<div class="workspace">
+  <!-- 左：3D 画布 -->
+  <div class="stage" id="stage">
+    <div class="hint">3D 飞行场景 · 待填充航线与节点</div>
+  </div>
+
+  <!-- 右：信息面板 -->
+  <aside class="panel">
+    <div class="panel-section">
+      <h3>当前节点</h3>
+      <div class="content"><div class="placeholder">待填充：当前经过的计算节点</div></div>
+    </div>
+    <div class="panel-section">
+      <h3>计算过程</h3>
+      <div class="content"><div class="placeholder">待填充：权重 × 输入 + 偏置 → 激活</div></div>
+    </div>
+    <div class="panel-section">
+      <h3>生活化解释</h3>
+      <div class="content"><div class="placeholder">待填充：用比喻解释这一步的含义</div></div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="startBtn">▶ 出发</button>
+      <button class="btn ghost" id="viewBtn">看看网络</button>
+      <button class="btn ghost" id="resetBtn">重置</button>
+    </div>
+  </aside>
+</div>
+
+<!-- Three.js（与原项目相同的技术栈，场景内容待一起填充） -->
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+const stage = document.getElementById('stage');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0e18);
+
+const camera = new THREE.PerspectiveCamera(60, stage.clientWidth/stage.clientHeight, 0.1, 1000);
+camera.position.set(0, 1.5, 6);
+camera.lookAt(0,0,0);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(stage.clientWidth, stage.clientHeight);
+stage.appendChild(renderer.domElement);
+
+// 灯光
+scene.add(new THREE.AmbientLight(0x404060, 1));
+const dir = new THREE.DirectionalLight(0x88aaff, 0.8);
+dir.position.set(5,10,7); scene.add(dir);
+
+// 占位：一条参考坐标轴 + 一个待替换的几何体
+const grid = new THREE.GridHelper(10, 10, 0x1e293b, 0x161d2e);
+scene.add(grid);
+const axes = new THREE.AxesHelper(2);
+scene.add(axes);
+
+// 占位节点（后续替换为 MLP 神经元节点）
+const placeholder = new THREE.Mesh(
+  new THREE.IcosahedronGeometry(0.5, 0),
+  new THREE.MeshStandardMaterial({color:0x7c5cff, roughness:.4, metalness:.3})
+);
+placeholder.position.set(0,0.5,0);
+scene.add(placeholder);
+
+function animate(){
+  requestAnimationFrame(animate);
+  placeholder.rotation.y += 0.008;
+  placeholder.rotation.x += 0.004;
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', ()=>{
+  camera.aspect = stage.clientWidth/stage.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(stage.clientWidth, stage.clientHeight);
+});
+</script>
+
+</body>
+</html>
