@@ -141,8 +141,8 @@
     <div class="doc-nav">
       <a href="#mapping">元素对照</a>
       <a href="#howto">如何训练</a>
-      <a href="#walkthrough">一次演练</a>
-      <a href="#limits">局限与数据</a>
+      <a href="#walkthrough">训练演示</a>
+      <a href="#limits">局限说明</a>
     </div>
   </section>
 
@@ -253,118 +253,74 @@
   <!-- ============ 一次完整演练 ============ -->
   <section class="doc" id="walkthrough">
     <span class="kicker">03 · 演练</span>
-    <h2>用两条演示数据走一遍训练</h2>
-    <p class="doc-lead">下面用一组手工设定的初始参数和 2 条样本，完整演算一次迭代。页面实际使用随机初始化和 160 条样本，数值不会相同，但计算流程完全一致。</p>
+    <h2>一次训练的演示</h2>
+    <p class="doc-lead">用 2 条数据和一组初始参数，看训练一轮前后发生了什么。</p>
 
     <div class="doc-card">
-      <h3 style="font-size:.95rem;margin-bottom:.8rem">演示数据（2 条样本）</h3>
       <table class="demo-table">
         <thead>
-          <tr><th>样本</th><th>心情 x₁</th><th>天气 x₂</th><th>真实标签 y</th><th>现实含义</th></tr>
+          <tr><th>样本</th><th>心情</th><th>天气</th><th>真实结果</th></tr>
         </thead>
         <tbody>
-          <tr><td>①</td><td class="hl">0.8</td><td class="hl">0.9</td><td class="hl">1</td><td>心情好、天气好 → 去</td></tr>
-          <tr><td>②</td><td class="hl">-0.6</td><td class="hl">-0.5</td><td class="hl">0</td><td>心情差、天气差 → 不去</td></tr>
+          <tr><td>①</td><td class="hl">0.8</td><td class="hl">0.9</td><td class="hl">去</td></tr>
+          <tr><td>②</td><td class="hl">-0.6</td><td class="hl">-0.5</td><td class="hl">不去</td></tr>
         </tbody>
       </table>
 
-      <p style="font-size:.88rem;color:var(--muted);margin-bottom:.8rem">网络结构：2 输入 → <b style="color:var(--fg)">2 个隐藏神经元（tanh）</b> → 1 输出（sigmoid），学习率 η = 0.1。初始参数手工设定为：</p>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:.8rem">网络：2 个输入 → 2 个隐藏神经元 → 1 个输出，学习率 0.1。初始权重：</p>
       <div class="calc">
         <span class="lbl">W₁</span> = [[0.5, -0.3], [0.2, 0.4]]　　<span class="lbl">b₁</span> = [0.1, -0.1]<br>
-        <span class="lbl">W₂</span> = [0.6, -0.5]ᵀ　　<span class="lbl">b₂</span> = 0.05
+        <span class="lbl">W₂</span> = [0.6, -0.5]　　<span class="lbl">b₂</span> = 0.05
       </div>
 
-      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 1 步 · 前向传播（算预测）</h3>
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .7rem">训练一轮</h3>
       <div class="calc">
-        <span class="cmt">// 样本 ① 心情 0.8，天气 0.9</span><br>
-        <span class="lbl">z₁⁽¹⁾</span> = 0.5×0.8 + 0.2×0.9 + 0.1 = <b>0.680</b><br>
-        <span class="lbl">z₁⁽²⁾</span> = -0.3×0.8 + 0.4×0.9 − 0.1 = <b>0.020</b><br>
-        <span class="lbl">a₁</span> = tanh(0.680), tanh(0.020) = <b>0.592, 0.020</b><br>
-        <span class="lbl">z₂</span> = 0.6×0.592 + (−0.5)×0.020 + 0.05 = <b>0.395</b><br>
-        <span class="lbl">ŷ</span> = sigmoid(0.395) = <b>0.598</b>　<span class="cmt">→ 预测 59.8% 会去，真实是「去」</span>
-        <div class="divider"></div>
-        <span class="cmt">// 样本 ② 心情 -0.6，天气 -0.5</span><br>
-        <span class="lbl">z₁</span> = <b>-0.300, -0.120</b>　→　<span class="lbl">a₁</span> = <b>-0.291, -0.119</b><br>
-        <span class="lbl">z₂</span> = 0.6×(−0.291) + (−0.5)×(−0.119) + 0.05 = <b>-0.065</b><br>
-        <span class="lbl">ŷ</span> = sigmoid(−0.065) = <b>0.484</b>　<span class="cmt">→ 预测 48.4% 会去，真实是「不去」</span>
+        <span class="lbl">预测</span>　样本① <b>0.598</b>（希望接近 1）　样本② <b>0.484</b>（希望接近 0）<br>
+        <span class="lbl">损失</span>　<b>0.588</b><br>
+        <span class="lbl">更新</span>　W₂ 0.600 → <b>0.619</b>　　b₂ 0.050 → <b>0.046</b>
       </div>
 
-      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 2 步 · 计算损失</h3>
+      <h3 style="font-size:.95rem;margin:1.3rem 0 .7rem">一轮之后</h3>
       <div class="calc">
-        <span class="lbl">L₁</span> = −ln(0.598) = <b>0.515</b>　　<span class="lbl">L₂</span> = −ln(1 − 0.484) = <b>0.661</b><br>
-        <span class="lbl">L</span> = (0.515 + 0.661) / 2 = <b>0.588</b>　<span class="cmt">（两条样本的平均交叉熵）</span>
+        <span class="lbl">预测</span>　样本① 0.598 → <b>0.604</b>　样本② 0.484 → <b>0.476</b>　<span class="cmt">都往正确方向挪了一点</span><br>
+        <span class="lbl">损失</span>　0.588 → <b>0.575</b>　<span class="cmt">下降 0.013</span>
       </div>
-
-      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 3 步 · 反向传播（算梯度）</h3>
-      <div class="calc">
-        <span class="cmt">// 输出层误差，N = 2</span><br>
-        <span class="lbl">δ₂</span> = (ŷ − y)/N　→　样本① <b>-0.201</b>，样本② <b>+0.242</b><br>
-        <div class="divider"></div>
-        <span class="cmt">// 输出层权重梯度 = 隐藏层输出 × 输出层误差</span><br>
-        <span class="lbl">∂L/∂W₂¹</span> = 0.592×(−0.201) + (−0.291)×0.242 = <b>-0.190</b><br>
-        <span class="lbl">∂L/∂W₂²</span> = 0.020×(−0.201) + (−0.119)×0.242 = <b>-0.033</b><br>
-        <span class="lbl">∂L/∂b₂</span> = (−0.201) + 0.242 = <b>+0.041</b><br>
-        <div class="divider"></div>
-        <span class="cmt">// 隐藏层误差 = 输出层误差回传 × tanh 导数 (1 − a₁²)</span><br>
-        <span class="lbl">δ₁</span> 样本① ≈ <b>-0.078, +0.100</b>　样本② ≈ <b>+0.133, -0.119</b><br>
-        <span class="lbl">∂L/∂W₁</span> = 输入 × δ₁ 累加 → <b>-0.142, -0.137, +0.151, +0.150</b><br>
-        <span class="lbl">∂L/∂b₁</span> = <b>+0.055, -0.019</b>
-      </div>
-
-      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 4 步 · 梯度下降（更新参数）</h3>
-      <div class="calc">
-        <span class="cmt">// 规则：新值 = 旧值 − 学习率 × 梯度</span><br>
-        <span class="lbl">W₂</span> = 0.6 − 0.1×(−0.190) = <b>0.619</b>　　−0.5 − 0.1×(−0.033) = <b>-0.497</b><br>
-        <span class="lbl">b₂</span> = 0.05 − 0.1×0.041 = <b>0.046</b><br>
-        <span class="lbl">W₁</span> = <b>0.514, 0.214, -0.315, 0.385</b><br>
-        <span class="lbl">b₁</span> = <b>0.095, -0.098</b>
-      </div>
-
-      <h3 style="font-size:.95rem;margin:1.3rem 0 .8rem">第 5 步 · 一轮之后的效果</h3>
-      <div class="calc">
-        样本① ŷ：0.598 → <b>0.604</b>　（更接近 1，方向对了）<br>
-        样本② ŷ：0.484 → <b>0.476</b>　（更接近 0，方向对了）<br>
-        平均损失：0.588 → <b>0.575</b>　<span class="cmt">↓ 0.013</span>
-      </div>
-      <p class="note">一次更新只让损失下降约 0.013，参数几乎没变。这正是页面上需要成百上千次迭代的原因：学习是「一小步一小步挪」出来的，不是一步到位。</p>
+      <p class="note">一轮只让损失下降 0.013，所以要训练成百上千轮，决策边界才会明显成形。</p>
     </div>
   </section>
 
   <!-- ============ 局限与数据特殊性 ============ -->
   <section class="doc" id="limits">
-    <span class="kicker">04 · 边界</span>
-    <h2>这个模型的局限与数据的特殊性</h2>
-    <p class="doc-lead">热力图很好看，但要清楚它证明了什么、没证明什么。下面两点决定了你应该如何解读页面上出现的数字。</p>
+    <span class="kicker">04 · 说明</span>
+    <h2>模型的局限与数据说明</h2>
+    <p class="doc-lead">这个演示能说明原理，但不代表真实能力。看结果时注意以下几点。</p>
 
     <div class="two-col">
       <div class="limit-box">
-        <h3><span class="dot" style="background:var(--warn,#f59e0b)"></span>模型本身的局限</h3>
+        <h3><span class="dot" style="background:var(--warn,#f59e0b)"></span>模型能做什么、不能做什么</h3>
         <ul>
-          <li><b>容量有限：</b>只有 1 个隐藏层、最多 12 个神经元，能画出弯曲边界，但应付不了螺旋这类高度复杂的分布。</li>
-          <li><b>对初始化敏感：</b>权重随机初始化，同样超参数两次训练得到的结果不完全一致。</li>
-          <li><b>对学习率敏感：</b>太大震荡甚至发散，太小则收敛极慢。</li>
-          <li><b>全批量梯度下降：</b>每一步都用全部 160 条样本，数据量大时非常慢；实际训练通常用 mini-batch。</li>
-          <li><b>没有正则化：</b>隐藏神经元过多时，模型会把噪声也记住，出现<b>过拟合</b>。</li>
-          <li><b>只支持二分类：</b>输出层是 sigmoid；多分类需要改成 softmax + 多输出。</li>
-          <li><b>准确率只是训练集准确率：</b>页面没有划分验证集/测试集，不能据此判断泛化能力。</li>
-          <li><b>输入已归一化：</b>心情与天气都被压到 [-1, 1]；真实数据需要先做标准化，否则训练会很不稳定。</li>
+          <li><b>只能处理简单问题：</b>网络很小，遇到特别复杂的分布就分不开。</li>
+          <li><b>每次结果略有不同：</b>初始权重是随机的，同样参数训练两次，结果不完全一样。</li>
+          <li><b>学习率要合适：</b>太大来回震荡，太小训练很慢。</li>
+          <li><b>只能二选一：</b>输出是「去 / 不去」，要做多分类得改网络结构。</li>
+          <li><b>只会背训练数据：</b>准确率只针对这 160 条数据，不能说明遇到新数据也准。</li>
+          <li><b>神经元太多会死记硬背：</b>把随机错标也学进去，反而画不出清晰边界。</li>
         </ul>
       </div>
 
       <div class="limit-box">
-        <h3><span class="dot" style="background:var(--accent2)"></span>演示数据的特殊性</h3>
+        <h3><span class="dot" style="background:var(--accent2)"></span>演示数据是怎么来的</h3>
         <ul>
-          <li><b>人工规则生成，不是真实采集：</b>心情与天气同号时结果确定（都好 → 去，都差 → 不去）；异号时由天气主导——天气好则 70% 去，天气差则 70% 不去。核心是一个接近 XOR 的非线性问题。</li>
-          <li><b>规模很小：</b>2 个特征、160 条样本，均匀分布在 [-1, 1]² 内，纯粹为了能画成二维图。</li>
-          <li><b>标签含 30% 随机翻转：</b>两个「一好一差」的象限里，有 30% 的标签是随机反的。这部分噪声无法被任何模型学会。</li>
-          <li><b>准确率上限约 85%：</b>两个确定象限（各 25%）全对，两个不确定象限（各 25%）只能对 70%，即 0.25 + 0.25 + 0.175 + 0.175 = 0.85。若准确率明显超过 85%，说明模型在「背」噪声，是过拟合的信号。</li>
-          <li><b>无缺失、无异常值、类别大致均衡：</b>省去了真实数据清洗的麻烦，也因此不能代表真实场景的难度。</li>
-          <li><b>不能外推到真实行为：</b>现实中「去不去健身房」还受时间、同伴、身体状况等影响，这套二维规则只是教学简化。</li>
+          <li><b>人为编的规则：</b>心情天气都好就去，都差就不去，一好一差时看天气。</li>
+          <li><b>数据量很小：</b>只有 2 个因素、160 条记录，方便画成二维图。</li>
+          <li><b>故意加了 30% 错标：</b>一部分结果随机反着写，模拟「说不准」的情况。</li>
+          <li><b>准确率最高约 85%：</b>那 30% 错标谁也学不会，所以准确率再高反而可疑，可能是把错答案也背下来了。</li>
+          <li><b>不代表真实情况：</b>现实中要不要去健身还受时间、同伴、身体状态影响，这里只是简化演示。</li>
         </ul>
       </div>
     </div>
 
-    <p class="note">正确的解读方式：页面上决策边界的成形，证明的是「前向传播 + 反向传播 + 梯度下降」这套机制能让参数朝着正确的方向移动；它不证明模型适用于真实决策，也不代表 85% 以上的准确率是「更好」。</p>
+    <p class="note">简单说：这个页面证明的是「训练机制有效」，不是「模型很聪明」。</p>
   </section>
 
 </main>
