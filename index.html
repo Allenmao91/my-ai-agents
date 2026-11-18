@@ -212,6 +212,51 @@
     .chart-figure .chart-note { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; }
     .chart-figure figcaption .cap-tag { font-family: var(--font-mono); font-size: 0.74rem; color: var(--accent2); margin-right: 0.5rem; }
 
+    /* === Task archive === */
+    .archive-groups { display: grid; gap: 1.2rem; }
+    .archive-group {
+      background: var(--bg2); border: 1px solid var(--rule); border-radius: 16px;
+      padding: 1.4rem 1.6rem; box-shadow: 0 10px 30px var(--shadow);
+    }
+    .archive-head { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+    .archive-head h3 { font-size: 1.08rem; font-weight: 700; }
+    .archive-head .count {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+      color: var(--accent2); background: var(--accent2-soft);
+      border-radius: 999px; padding: 0.16rem 0.6rem;
+    }
+    .archive-group > .archive-desc { font-size: 0.88rem; color: var(--muted); margin: 0.2rem 0 0.4rem; }
+    .task-list { list-style: none; }
+    .task-item {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: 0.85rem 0; border-top: 1px dashed var(--rule);
+    }
+    .task-item:first-child { border-top: none; padding-top: 0.55rem; }
+    .task-id {
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
+      color: var(--muted); background: var(--bg); border: 1px solid var(--rule);
+      border-radius: 6px; padding: 0.16rem 0.45rem; flex: none; margin-top: 0.18rem;
+    }
+    .task-main { flex: 1; min-width: 0; }
+    .task-title { font-size: 0.97rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .task-desc { font-size: 0.87rem; color: var(--muted); margin-top: 0.12rem; }
+    .task-status {
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
+      border-radius: 999px; padding: 0.1rem 0.5rem; white-space: nowrap;
+    }
+    .task-status.done { color: #0d9668; background: rgba(16, 185, 129, 0.12); }
+    .task-status.wip { color: #b45309; background: rgba(245, 158, 11, 0.14); }
+    .task-status.plan { color: var(--muted); background: rgba(92, 99, 121, 0.1); }
+    .task-side { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; }
+    .task-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+    .task-link {
+      font-size: 0.8rem; font-weight: 700; color: var(--accent2);
+      background: var(--accent2-soft); border: 1px solid var(--accent2-soft);
+      border-radius: 7px; padding: 0.2rem 0.6rem; white-space: nowrap;
+    }
+    .task-link:hover { background: var(--accent2); color: #ffffff; text-decoration: none; }
+    .task-empty { font-size: 0.88rem; color: var(--muted); padding: 0.6rem 0; }
+
     /* === Engineering grid === */
     .eng-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
     .agent-grid { grid-template-columns: repeat(2, 1fr); }
@@ -284,6 +329,8 @@
       .eng-grid { grid-template-columns: 1fr; }
       .agent-card { padding: 1.5rem 1.3rem; }
       .badges { margin-left: 0; }
+      .task-item { flex-wrap: wrap; }
+      .task-side { flex-direction: row; align-items: center; margin-left: 2.6rem; }
     }
 
     @media print {
@@ -300,6 +347,8 @@
         <span class="brand">agent<em>.workbench</em></span>
         <div class="links">
           <a href="#agents">Agents</a>
+          <a href="#tasks">任务</a>
+          <a href="#archive">任务档案</a>
           <a href="#results">成效</a>
           <a href="#engineering">工程亮点</a>
           <a href="#timeline">历程</a>
@@ -480,8 +529,15 @@
       </article>
     </section>
 
+    <section id="archive">
+      <span class="kicker">03 · ARCHIVE</span>
+      <h2>任务档案</h2>
+      <p class="section-lead">每完成一项任务就在此归档一块：编号、分类、状态、产出链接，点开即可检查成果。以后新增任务，只需在页面脚本顶部的 <code>TASK_GROUPS</code> 数组里追加一条记录。</p>
+      <div class="archive-groups" id="taskArchive"></div>
+    </section>
+
     <section id="results">
-      <span class="kicker">03 · RESULTS</span>
+      <span class="kicker">04 · RESULTS</span>
       <h2>阶段性成效</h2>
       <p class="section-lead">以智慧树《古希腊文明》共享课为例，由 TRAE + GLM 驱动的刷课任务在单次会话中自动完成了 5 个小节，剩余小节可随时一键续刷。</p>
 
@@ -493,7 +549,7 @@
     </section>
 
     <section id="engineering">
-      <span class="kicker">04 · ENGINEERING</span>
+      <span class="kicker">05 · ENGINEERING</span>
       <h2>工程亮点</h2>
       <p class="section-lead">真实平台从不配合：静音会被取消、点击会跳首页、播放会被限速。这些坑，都被逐一逆向并解决，沉淀为工程经验。</p>
 
@@ -532,7 +588,7 @@
     </section>
 
     <section id="timeline">
-      <span class="kicker">05 · TIMELINE</span>
+      <span class="kicker">06 · TIMELINE</span>
       <h2>成长历程</h2>
       <p class="section-lead">从人肉挂机到桌面待办，这条自动化之路是这样走出来的。</p>
 
@@ -580,6 +636,103 @@
 
   <script src="./_shared/js/echarts.min.js"></script>
   <script src="assets/charts.js"></script>
+  <script>
+    /* ============================================================
+       任务档案数据 —— 以后新增任务只需在这里追加一条记录
+       status: done（已交付） / wip（进行中） / plan（计划中）
+       link 可省略（无独立产出页面时）
+       ============================================================ */
+    const TASK_GROUPS = [
+      {
+        title: '课程与学习',
+        desc: '人工智能概论等课程作业，交付可交互的可视化成果。',
+        tasks: [
+          {
+            id: 'T-07', title: 'MLP 可视化框架 · 场景待填充',
+            desc: '2D 场景式呈现骨架：左侧画布 + 右侧信息面板 + 控制按钮，内容留空待填充。',
+            status: 'wip', statusText: '框架已建', date: '2026-11-18',
+            link: 'mlp-flight.html', linkText: '查看框架'
+          },
+          {
+            id: 'T-06', title: 'MLP 学习参数可视化 · 决策边界 + 权重热力图',
+            desc: '健身房场景：手写前向传播与反向传播，实时展示决策边界演化与 W₁ / b₁ / W₂ / b₂ 热力图更新，可调学习率、隐藏神经元与激活函数。',
+            status: 'done', statusText: '已交付', date: '2026-11-18',
+            link: 'mlp-boundary.html', linkText: '查看成果'
+          },
+          {
+            id: 'T-05', title: 'MLP 交互实验 · 多数据集训练',
+            desc: 'XOR、同心圆、双月、螺旋四类数据集的决策边界训练演示，完整实现前向传播、交叉熵损失、反向传播与梯度下降。',
+            status: 'done', statusText: '已交付', date: '2026-11-18',
+            link: 'mlp.html', linkText: '查看成果'
+          }
+        ]
+      },
+      {
+        title: '自动化流程',
+        desc: '浏览器端的重复劳动自动化：自动登录、静音播放、自动答题、断点续刷。',
+        tasks: [
+          {
+            id: 'T-02', title: '智慧树《古希腊文明》自动刷课',
+            desc: '机构登录、进度圆环判定、AI 随堂练习自动作答并关闭弹窗、已完成小节零重复播放，单次会话完成 5 个小节并可断点续刷。',
+            status: 'done', statusText: '已交付', date: '2026-10'
+          },
+          {
+            id: 'T-01', title: '苏大在线课程自动播放',
+            desc: '自动登录 suda.wnssedu.com，静音播放课程任务视频，播完自动跳转下一节，遇到问答题自动作答并提交。',
+            status: 'done', statusText: '已交付', date: '2026-10'
+          }
+        ]
+      },
+      {
+        title: '工具与基础设施',
+        desc: '从浏览器走进日常的工具，以及承载这些成果的个人站点。',
+        tasks: [
+          {
+            id: 'T-04', title: '个人网站 + GitHub Pages 部署',
+            desc: '本地零依赖静态站点，通过 GitHub API 发布至 GitHub Pages，含 Agent 介绍、任务卡片、成效图表与任务档案归档机制。',
+            status: 'done', statusText: '已上线', date: '2026-11'
+          },
+          {
+            id: 'T-03', title: '桌面待办工具（Python GUI）',
+            desc: '桌面置顶悬浮窗，支持添加 / 勾选待办、截止前两天自动提醒、优先级色条与双模式切换，todos.json 持久化。',
+            status: 'done', statusText: '已交付', date: '2026-10'
+          }
+        ]
+      }
+    ];
+
+    (function renderTaskArchive() {
+      const root = document.getElementById('taskArchive');
+      if (!root) return;
+      const badgeClass = { done: 'done', wip: 'wip', plan: 'plan' };
+      TASK_GROUPS.forEach(function (group) {
+        const items = group.tasks.map(function (t) {
+          const date = t.date ? '<span class="task-date">' + t.date + '</span>' : '';
+          const link = t.link
+            ? '<a class="task-link" href="' + t.link + '">' + (t.linkText || '查看成果') + '</a>'
+            : '';
+          return '<li class="task-item">' +
+              '<span class="task-id">' + t.id + '</span>' +
+              '<div class="task-main">' +
+                '<div class="task-title">' + t.title +
+                  '<span class="task-status ' + (badgeClass[t.status] || 'plan') + '">' + t.statusText + '</span>' +
+                '</div>' +
+                '<div class="task-desc">' + t.desc + '</div>' +
+              '</div>' +
+              '<div class="task-side">' + date + link + '</div>' +
+            '</li>';
+        }).join('');
+        const box = document.createElement('div');
+        box.className = 'archive-group';
+        box.innerHTML =
+          '<div class="archive-head"><h3>' + group.title + '</h3>' +
+            '<span class="count">' + group.tasks.length + ' 项</span></div>' +
+          '<p class="archive-desc">' + (group.desc || '') + '</p>' +
+          '<ul class="task-list">' + items + '</ul>';
+        root.appendChild(box);
+      });
+    })();
+  </script>
 </body>
 </html>
 
